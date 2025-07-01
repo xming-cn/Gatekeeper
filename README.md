@@ -35,7 +35,7 @@ public class PluginA extends JavaPlugin {
 Registered routes will be exposed as:
 
 ```
-GET /api/plugin-a/ping
+GET /api/plugina/ping
 ```
 
 ---
@@ -103,7 +103,7 @@ POST /api/gatekeeper/broadcast
 ### Health check
 
 ```
-GET /api/gatekeeper/health
+GET /health
 ```
 
 Returns a simple status to verify that the plugin and HTTP gateway are running:

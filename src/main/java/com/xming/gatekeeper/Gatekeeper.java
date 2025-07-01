@@ -16,9 +16,13 @@ public final class Gatekeeper extends JavaPlugin {
     private Javalin app;
     private ApiGatewayImpl gateway;
 
+    private long startTime;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
+        this.startTime = System.currentTimeMillis();
+
         app = Javalin.create().start(8080);
         JwtManager jwt = new JwtManager("secret-key");
         this.gateway = new ApiGatewayImpl(app, jwt);
@@ -38,6 +42,16 @@ public final class Gatekeeper extends JavaPlugin {
                 System.out.println("Login failed for user: " + username + ", password: " + password);
                 ctx.status(401).json(Map.of("error", "Invalid credentials"));
             }
+        });
+
+        app.get("/health", ctx -> {
+            int onlinePlayers = Bukkit.getOnlinePlayers().size();
+            int uptime = (int) ((System.currentTimeMillis() - startTime) / 1000);
+            ctx.json(Map.of(
+                    "status", "ok",
+                    "onlinePlayers", onlinePlayers,
+                    "uptime", uptime
+            ));
         });
 
         registerPluginRoutes();

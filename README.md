@@ -25,7 +25,7 @@ public class PluginA extends JavaPlugin {
     @Override
     public void onEnable() {
         ApiGateway api = getServer().getServicesManager().load(ApiGateway.class);
-        api.registerPluginRoutes("plugin-a", routes -> {
+        api.registerPluginRoutes(this, routes -> {
             routes.get("/ping", req -> ApiResponse.json(200, Map.of("pong", true)));
         });
     }

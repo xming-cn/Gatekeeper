@@ -94,9 +94,7 @@ POST /api/gatekeeper/broadcast
 
 ```json
 {
-  "message": "&6[Notice] &eServer will restart in 10 minutes",
-  "permission": "",
-  "type": "chat" // "chat", "title", or "actionbar"
+  "message": "&6[Notice] &eServer will restart in 10 minutes"
 }
 ```
 

@@ -6,6 +6,7 @@ import com.xming.gatekeeper.jwt.JwtManager;
 import com.xming.gatekeeper.web.ApiGatewayImpl;
 import io.javalin.Javalin;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,13 +19,19 @@ public final class Gatekeeper extends JavaPlugin {
 
     private long startTime;
 
+    private FileConfiguration config;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         this.startTime = System.currentTimeMillis();
 
+        this.saveDefaultConfig();
+        this.config = this.getConfig();
+        String secretKey = config.getString("jwt.secret-key");
+
         app = Javalin.create().start(8080);
-        JwtManager jwt = new JwtManager("secret-key");
+        JwtManager jwt = new JwtManager(secretKey);
         this.gateway = new ApiGatewayImpl(app, jwt);
 
         getServer().getServicesManager().register(ApiGateway.class, gateway, this, ServicePriority.High);

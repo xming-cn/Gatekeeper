@@ -1,0 +1,2 @@
+jwt:
+    secret-key: "your-secret-key"

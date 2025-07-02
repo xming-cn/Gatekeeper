@@ -1,7 +1,6 @@
 package com.xming.gatekeeper;
 
 import com.xming.gatekeeper.api.ApiGateway;
-import com.xming.gatekeeper.api.ApiResponse;
 import com.xming.gatekeeper.jwt.JwtManager;
 import com.xming.gatekeeper.web.ApiGatewayImpl;
 import io.javalin.Javalin;
@@ -10,8 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public final class Gatekeeper extends JavaPlugin {
     private Javalin app;
@@ -61,26 +59,12 @@ public final class Gatekeeper extends JavaPlugin {
             ));
         });
 
-        registerPluginRoutes();
+        GatekeeperRoutes.registerPluginRoutes(this, this.gateway);
     }
 
-    private void registerPluginRoutes() {
-        this.gateway.registerPluginRoutes(this, builder -> {
-            builder.get(
-                    "/ping",
-                    request -> ApiResponse.json(200, Map.of("message", "pong"))
-            );
-            builder.post(
-                    "/broadcast",
-                    request -> {
-                        Map<String, Object> data = request.getJsonBody();
-                        String message = (String) data.get("message");
-                        Bukkit.getServer().broadcastMessage(message);
-                        return ApiResponse.json(200, Map.of("status", "success"));
-                    }
-            );
-        });
-    }
+
+
+
 
     @Override
     public void onDisable() {

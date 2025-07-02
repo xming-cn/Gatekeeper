@@ -25,8 +25,8 @@ public class PluginA extends JavaPlugin {
     @Override
     public void onEnable() {
         ApiGateway api = getServer().getServicesManager().load(ApiGateway.class);
-        api.registerPluginRoutes(this, routes -> {
-            routes.get("/ping", req -> ApiResponse.json(200, Map.of("pong", true)));
+        api.registerPluginRoutes(this, builder -> {
+            builder.get("/ping", request -> ApiResponse.json(200, Map.of("message", "pong")));
         });
     }
 }
@@ -94,7 +94,7 @@ POST /api/gatekeeper/broadcast
 
 ```json
 {
-  "message": "&6[Notice] &eServer will restart in 10 minutes"
+  "message": "§6[Notice] §eServer will restart in 10 minutes"
 }
 ```
 
@@ -141,9 +141,9 @@ Returns a simple status to verify that the plugin and HTTP gateway are running:
 ## 🧪 In Development
 
 * [ ] Multi-user account system
-* [ ] Bukkit permission integration
 * [ ] Swagger/OpenAPI generation
 * [ ] Plugin-to-plugin API auth hook
+* [ ] Websocket support for real-time updates
 
 ---
 

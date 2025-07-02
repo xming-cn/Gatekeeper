@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -85,7 +86,13 @@ public class GatekeeperRoutes {
                         if (player == null) {
                             return ApiResponse.json(404, Map.of("error", "Player not found"));
                         }
-                        player.kickPlayer("You have been kicked by an admin.");
+                        String reason = request.getJsonBody().getOrDefault("reason", "You have been kicked by an admin.").toString();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                player.kickPlayer(reason);
+                            }
+                        }.runTask(plugin);
                         return ApiResponse.json(200, Map.of("status", "success"));
                     }
             );
@@ -99,7 +106,12 @@ public class GatekeeperRoutes {
                         }
                         Map<String, Object> data = request.getJsonBody();
                         String message = (String) data.get("message");
-                        player.sendMessage(message);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                player.sendMessage(message);
+                            }
+                        }.runTask(plugin);
                         return ApiResponse.json(200, Map.of("status", "success"));
                     }
             );
@@ -126,7 +138,12 @@ public class GatekeeperRoutes {
                             return ApiResponse.json(404, Map.of("error", "World not found"));
                         }
 
-                        player.teleport(new Location(world, x, y, z));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                player.teleport(new Location(world, x, y, z));
+                            }
+                        }.runTask(plugin);
                         return ApiResponse.json(200, Map.of("status", "success"));
                     }
             );
@@ -140,7 +157,12 @@ public class GatekeeperRoutes {
                         }
                         Map<String, Object> data = request.getJsonBody();
                         String message = (String) data.get("message");
-                        player.sendMessage(message);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                player.sendMessage(message);
+                            }
+                        }.runTask(plugin);
                         return ApiResponse.json(200, Map.of("status", "success"));
                     }
             );
@@ -149,7 +171,12 @@ public class GatekeeperRoutes {
                     request -> {
                         Map<String, Object> data = request.getJsonBody();
                         String message = (String) data.get("message");
-                        Bukkit.getServer().broadcastMessage(message);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Bukkit.getServer().broadcastMessage(message);
+                            }
+                        }.runTask(plugin);
                         return ApiResponse.json(200, Map.of("status", "success"));
                     }
             );
@@ -161,7 +188,12 @@ public class GatekeeperRoutes {
                         if (command == null || command.isEmpty()) {
                             return ApiResponse.json(400, Map.of("error", "Command cannot be empty"));
                         }
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                            }
+                        }.runTask(plugin);
                         return ApiResponse.json(200, Map.of("status", "success"));
                     }
             );

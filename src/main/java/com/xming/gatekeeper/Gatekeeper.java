@@ -4,6 +4,7 @@ import com.xming.gatekeeper.api.ApiGateway;
 import com.xming.gatekeeper.jwt.JwtManager;
 import com.xming.gatekeeper.web.ApiGatewayImpl;
 import io.javalin.Javalin;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.ServicePriority;
@@ -28,7 +29,9 @@ public final class Gatekeeper extends JavaPlugin {
         this.config = this.getConfig();
         String secretKey = config.getString("jwt.secret-key");
 
-        app = Javalin.create().start(8080);
+        app = Javalin.create(config -> {
+            config.bundledPlugins.enableCors(cors -> cors.addRule(CorsPluginConfig.CorsRule::anyHost));
+        }).start(8080);
         JwtManager jwt = new JwtManager(secretKey);
         this.gateway = new ApiGatewayImpl(app, jwt);
 
@@ -61,10 +64,6 @@ public final class Gatekeeper extends JavaPlugin {
 
         GatekeeperRoutes.registerPluginRoutes(this, this.gateway);
     }
-
-
-
-
 
     @Override
     public void onDisable() {

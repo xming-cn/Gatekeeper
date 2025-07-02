@@ -22,6 +22,10 @@ public class ApiGatewayImpl implements ApiGateway {
     @Override
     public void registerPluginRoutes(Plugin plugin, RouteRegistrar registrar) {
         String namespace = plugin.getName().toLowerCase();
+        this.registerPluginRoutes(namespace, registrar);
+    }
+
+    public void registerPluginRoutes(String namespace, RouteRegistrar registrar) {
         if (routeBuilders.containsKey(namespace)) {
             throw new IllegalArgumentException("Namespace already registered: " + namespace);
         }

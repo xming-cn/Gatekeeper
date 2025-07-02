@@ -13,9 +13,9 @@ public class RouteBuilderImpl implements RouteBuilder {
     private final String prefix;
     private final JwtManager jwtManager;
 
-    public RouteBuilderImpl(Javalin app, @Nullable String namespace, JwtManager jwtManager) {
+    public RouteBuilderImpl(Javalin app, String namespace, JwtManager jwtManager) {
         this.app = app;
-        this.prefix = namespace != null ? "/api/" + namespace : "/api";
+        this.prefix = "/api/" + namespace;
         this.jwtManager = jwtManager;
     }
 

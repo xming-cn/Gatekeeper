@@ -22,4 +22,7 @@ public class JavalinApiRequest implements ApiRequest {
     @Override public String getBody() { return ctx.body(); }
     @Override public Map<String, Object> getJsonBody() { return ctx.bodyAsClass(Map.class); }
     @Override public AuthUser getAuthenticatedUser() { return user; }
+    @Override public String getPathParam(String name) {
+        return ctx.pathParam(name);
+    }
 }

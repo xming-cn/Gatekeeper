@@ -21,13 +21,14 @@ public class JwtManager {
         this.verifier = JWT.require(algorithm).withIssuer("gatekeeper").build();
     }
 
-    public String issueToken(String username, Set<String> roles) {
+    public String issueToken(String username, Set<String> roles, Integer expiration) {
+        long expiryTime = expiration * 1000L;
         return JWT.create()
                 .withIssuer("gatekeeper")
                 .withSubject(username)
                 .withClaim("roles", new ArrayList<>(roles))
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 3600_000)) // 1 小时
+                .withExpiresAt(new Date(System.currentTimeMillis() + expiryTime))
                 .sign(algorithm);
     }
 

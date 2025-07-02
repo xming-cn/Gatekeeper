@@ -1,2 +1,6 @@
 jwt:
     secret-key: "your-secret-key"
+    token-expiration: 3600 # in seconds
+
+# this will be removed in the future
+admin-password: "123456"

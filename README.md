@@ -57,11 +57,6 @@ POST /auth/login
 }
 ```
 
-> ⚠️ For now, credentials are **hardcoded** for development/testing only:
->
-> * Username: `admin`
-> * Password: `123456`
-
 #### Response:
 
 ```json

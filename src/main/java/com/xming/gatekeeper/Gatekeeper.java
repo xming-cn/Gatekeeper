@@ -28,6 +28,8 @@ public final class Gatekeeper extends JavaPlugin {
         this.saveDefaultConfig();
         this.config = this.getConfig();
         String secretKey = config.getString("jwt.secret-key");
+        Integer tokenExpiration = config.getInt("token-expiration", 3600);
+        String adminPassword = config.getString("admin-password", "123456");
 
         app = Javalin.create(config -> {
             config.bundledPlugins.enableCors(cors -> cors.addRule(CorsPluginConfig.CorsRule::anyHost));
@@ -43,11 +45,10 @@ public final class Gatekeeper extends JavaPlugin {
             String password = (String) data.get("password");
 
             // 暂时硬编码账号密码
-            if ("admin".equals(username) && "123456".equals(password)) {
-                String token = jwt.issueToken("admin", Set.of("admin"));
+            if ("admin".equals(username) && adminPassword.equals(password)) {
+                String token = jwt.issueToken("admin", Set.of("admin"), tokenExpiration);
                 ctx.json(Map.of("token", token));
             } else {
-                System.out.println("Login failed for user: " + username + ", password: " + password);
                 ctx.status(401).json(Map.of("error", "Invalid credentials"));
             }
         });

@@ -30,10 +30,11 @@ public final class Gatekeeper extends JavaPlugin {
         String secretKey = config.getString("jwt.secret-key");
         Integer tokenExpiration = config.getInt("token-expiration", 3600);
         String adminPassword = config.getString("admin-password", "123456");
+        int port = config.getInt("port", 8080);
 
         app = Javalin.create(config -> {
             config.bundledPlugins.enableCors(cors -> cors.addRule(CorsPluginConfig.CorsRule::anyHost));
-        }).start(8080);
+        }).start(port);
         JwtManager jwt = new JwtManager(secretKey);
         this.gateway = new ApiGatewayImpl(app, jwt);
 

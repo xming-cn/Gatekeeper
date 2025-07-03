@@ -6,6 +6,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.xming.gatekeeper.api.AuthUser;
 import io.javalin.http.Context;
+import io.javalin.websocket.WsConnectContext;
+import io.javalin.websocket.WsContext;
+import io.javalin.websocket.WsMessageContext;
 
 import java.util.ArrayList;
 import java.util.Date;

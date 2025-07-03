@@ -1,4 +1,4 @@
-package com.xming.gatekeeper.api;
+package com.xming.gatekeeper.api.route;
 
 @FunctionalInterface
 public interface RouteRegistrar {

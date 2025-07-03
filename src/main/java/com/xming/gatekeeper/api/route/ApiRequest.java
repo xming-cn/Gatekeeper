@@ -1,4 +1,6 @@
-package com.xming.gatekeeper.api;
+package com.xming.gatekeeper.api.route;
+
+import com.xming.gatekeeper.api.AuthUser;
 
 import java.util.Map;
 

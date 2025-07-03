@@ -1,10 +1,13 @@
 package com.xming.gatekeeper.web;
 
+import com.xming.gatekeeper.api.route.ApiRequest;
+import com.xming.gatekeeper.api.route.ApiResponse;
+import com.xming.gatekeeper.api.route.RouteBuilder;
+import com.xming.gatekeeper.api.route.RouteHandler;
 import com.xming.gatekeeper.jwt.JwtManager;
 import io.javalin.Javalin;
 import com.xming.gatekeeper.api.*;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 public class RouteBuilderImpl implements RouteBuilder {

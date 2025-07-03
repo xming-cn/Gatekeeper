@@ -1,4 +1,4 @@
-package com.xming.gatekeeper.api;
+package com.xming.gatekeeper.api.route;
 
 public interface RouteBuilder {
     RouteBuilder get(String path, RouteHandler handler);

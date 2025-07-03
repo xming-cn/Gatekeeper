@@ -1,6 +1,6 @@
 package com.xming.gatekeeper.web;
 
-import com.xming.gatekeeper.api.ApiRequest;
+import com.xming.gatekeeper.api.route.ApiRequest;
 import com.xming.gatekeeper.api.AuthUser;
 import io.javalin.http.Context;
 

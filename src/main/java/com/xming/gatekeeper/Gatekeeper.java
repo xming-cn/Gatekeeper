@@ -13,6 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 public final class Gatekeeper extends JavaPlugin {
+    static Gatekeeper plugin;
+
     private Javalin app;
     private ApiGatewayImpl gateway;
 
@@ -25,8 +27,11 @@ public final class Gatekeeper extends JavaPlugin {
         // Plugin startup logic
         this.startTime = System.currentTimeMillis();
 
+        plugin = this;
+
         this.saveDefaultConfig();
         this.config = this.getConfig();
+
         String secretKey = config.getString("jwt.secret-key");
         Integer tokenExpiration = config.getInt("token-expiration", 3600);
         String adminPassword = config.getString("admin-password", "123456");
@@ -70,6 +75,24 @@ public final class Gatekeeper extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        gateway.getWsHub().clear();
         app.stop();
+        GatekeeperRoutes.unregisterPluginRoutes(this, this.gateway);
+    }
+
+    static public Gatekeeper getPlugin() {
+        return plugin;
+    }
+
+    public Javalin getApp() {
+        return app;
+    }
+
+    public ApiGatewayImpl getGateway() {
+        return gateway;
+    }
+
+    public long getStartTime() {
+        return startTime;
     }
 }

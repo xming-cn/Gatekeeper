@@ -77,6 +77,100 @@ Authorization: Bearer <your-token>
 
 ---
 
+## Websocket
+
+Register WebSocket endpoint in your plugin:
+
+```java
+public class PluginA extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        gateway.registerWebSocketRoutes(plugin, builder -> {
+            builder.on("/message", new WebSocketHandler() {
+                @Override
+                public void onConnect(WsSession session) {
+
+                }
+
+                @Override
+                public void onMessage(WsSession session, String message) {
+
+                }
+
+                @Override
+                public void onClose(WsSession session, int status, String reason) {
+
+                }
+
+                @Override
+                public void onError(WsSession session, Throwable error) {
+
+                }
+            });
+        });
+    }
+}
+```
+
+Registered WebSocket routes will be exposed as:
+
+```
+ws /ws/plugina/message
+```
+
+And Gatekeeper will managing sessions for you
+
+```java
+public class SomeClass {
+    @Override
+    public void anyFunction() {
+        WsHub hub = gateway.getWsHub();
+        hub.broadcast("plguina", "/message", message);
+    }
+}
+```
+
+Gatekeeper will also handle authentication for WebSocket connections. 
+Here is an example of how to authenticate in python:
+
+```python
+import json
+import asyncio
+import requests
+import websockets
+
+def get_token():
+    url = 'http://127.0.0.1:8080/auth/login'
+    data = {
+        'username': 'admin',
+        'password': 'yourpasswordhere'
+    }
+    response = requests.post(url, json=data)
+    if response.status_code == 200:
+        return response.json().get('token')
+    else:
+        raise Exception("Failed to get token")
+
+async def hello():
+    token = get_token()
+    uri = "ws://127.0.0.1:8080/ws/gatekeeper/logger"
+    async with websockets.connect(uri) as websocket:
+        auth_data = {
+            "type": "auth",
+            "token": token
+        }
+        await websocket.send(json.dumps(auth_data))
+        print("Authentication sent")
+        # {"type": "auth_ok"}
+        while True:
+            response = await websocket.recv()
+            print(response, end = '')
+
+asyncio.run(hello())
+```
+
+---
+
 ## 📢 Built-in Endpoints
 
 ### Broadcast a server-wide message
@@ -113,6 +207,15 @@ Returns a simple status to verify that the plugin and HTTP gateway are running:
 
 ---
 
+### Console Log Websocket
+```http
+ws /ws/gatekeeper/logger
+```
+
+Real time access to the server console logs via WebSocket.
+
+---
+
 ## 🔧 Requirements
 
 * Minecraft Server: Spigot 1.16+
@@ -138,7 +241,6 @@ Returns a simple status to verify that the plugin and HTTP gateway are running:
 * [ ] Multi-user account system
 * [ ] Swagger/OpenAPI generation
 * [ ] Plugin-to-plugin API auth hook
-* [ ] Websocket support for real-time updates
 
 ---
 

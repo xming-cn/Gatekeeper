@@ -39,7 +39,7 @@ public final class Gatekeeper extends JavaPlugin {
 
         app = Javalin.create(config -> {
             config.bundledPlugins.enableCors(cors -> cors.addRule(CorsPluginConfig.CorsRule::anyHost));
-        }).start(port);
+        }).start("0.0.0.0", port);
         JwtManager jwt = new JwtManager(secretKey);
         this.gateway = new ApiGatewayImpl(app, jwt);
 
